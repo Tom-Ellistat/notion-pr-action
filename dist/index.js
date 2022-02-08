@@ -4,11 +4,7 @@
 /******/ 
 /************************************************************************/
 var __webpack_exports__ = {};
-const NOTION_TOKEN_KEY = 'secret_yeQg15eQdxGepQHkojNJhhab39uhqo5kTP4FvBzV3pD';
-// const NOTION_DB_KEY = '96e254bd927a471d8b2f403b50f46067';
-
 const core = require("@actions/core");
-// const github = require("@actions/github");
 const { Client } = require("@notionhq/client")
 
 const { extractParams } = require('./githubParams')
@@ -34,7 +30,7 @@ if (urlFound) {
     const pageId = taskParts[taskParts.length - 1];
 
     const notion = new Client({
-        auth: NOTION_TOKEN_KEY
+        auth: process.env.NOTION_TOKEN
     })
 
     notion.pages.update({
