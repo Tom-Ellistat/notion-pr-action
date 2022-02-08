@@ -1,0 +1,16 @@
+name: 'Notion x GitHub Action'
+description: 'Sync GitHub pull request to a Notion database'
+inputs:
+  notion-token:
+    description: 'Your Notion API Token'
+    required: true
+  notion-db:
+    description: 'The Notion database id'
+    required: true
+  github-token:
+    description: 'Your GitHub personal access token'
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: 'node16'
+  main: 'index.js'

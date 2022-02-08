@@ -1,0 +1,27 @@
+{
+  "name": "notionXgithub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tom-Ellistat/notion-pr-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tom-Ellistat/notion-pr-action/issues"
+  },
+  "homepage": "https://github.com/Tom-Ellistat/notion-pr-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "@notionhq/client": "^0.1.9",
+    "@octokit/core": "^3.5.1",
+    "octokit": "^1.1.0"
+  }
+}
