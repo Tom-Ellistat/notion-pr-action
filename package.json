@@ -23,5 +23,6 @@
     "@notionhq/client": "^0.1.9",
     "@octokit/core": "^3.5.1",
     "octokit": "^1.1.0"
-  }
+  },
+  "type": "module"
 }
