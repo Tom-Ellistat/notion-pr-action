@@ -1,30 +1,30 @@
-const core = require("@actions/core");
-const github = require("@actions/github");
+import { getInput } from "@actions/core";
+import { context } from "@actions/github";
 
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }
 
 function extractGithubParams() {
-    const pullRequest = github.context.payload.pull_request;
+    const pullRequest = context.payload.pull_request;
 
     const requiredPrefix = escapeRegExp(
-        core.getInput("required-prefix", { required: false }) || ""
+        getInput("required-prefix", { required: false }) || ""
     );
 
     const requiredSuffix = escapeRegExp(
-        core.getInput("required-suffix", { required: false }) || ""
+        getInput("required-suffix", { required: false }) || ""
     );
 
-    const isDraft = github.context.payload.pull_request?.draft
-    const isMerged = github.context.payload.pull_request?.merged
-    const statusKey = isMerged ? 'merged' : isDraft ? 'draft' : github.context.payload.action
-    const status = core.getInput(statusKey, { required: false });
+    const isDraft = context.payload.pull_request?.draft
+    const isMerged = context.payload.pull_request?.merged
+    const statusKey = isMerged ? 'merged' : isDraft ? 'draft' : context.payload.action
+    const status = getInput(statusKey, { required: false });
 
-    const githubUrlProperty = core.getInput("github-url-property-name", { required: false }) ||
+    const githubUrlProperty = getInput("github-url-property-name", { required: false }) ||
         "Github Url";
 
-    const statusProperty = core.getInput("status-property-name", { required: false }) || "Status";
+    const statusProperty = getInput("status-property-name", { required: false }) || "Status";
 
     return {
         metadata: {
@@ -44,4 +44,4 @@ function extractGithubParams() {
     }
 }
 
-module.exports = { extractParams: extractGithubParams }
+export const extractParams = extractGithubParams;
