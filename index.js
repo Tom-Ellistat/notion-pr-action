@@ -1,6 +1,6 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const run = require('./action');
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import { run } from './action';
 
 const NOTION_TOKEN_KEY = 'secret_yeQg15eQdxGepQHkojNJhhab39uhqo5kTP4FvBzV3pD';
 const NOTION_DB_KEY = '96e254bd927a471d8b2f403b50f46067';
