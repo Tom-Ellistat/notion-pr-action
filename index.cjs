@@ -1,6 +1,6 @@
-import { info, setFailed, warning } from "@actions/core";
-import { Client } from "@notionhq/client";
-import { extractParams } from './githubParams';
+const core = require("@actions/core");
+const { Client } = require("@notionhq/client")
+const { extractParams } = require('./githubParams.cjs')
 
 const URL_REGEX = "(https)://([\\w_-]+(?:(?:.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?";
 
@@ -40,12 +40,12 @@ if (urlFound) {
         }
     }).then(() => {
         if (!params.pullRequest.status) {
-            info(
+            core.info(
                 `The status ${params.metadata.statusKey} is not mapped with a value in the action definition. Hence, the task update body does not contain a status update`
             );
         }
-        info("Notion task updated!");
-    }).catch((err) => { setFailed(err); })
+        core.info("Notion task updated!");
+    }).catch((err) => { core.setFailed(err); })
 } else {
-    warning("No notion task found in the PR body.");
+    core.warning("No notion task found in the PR body.");
 }
