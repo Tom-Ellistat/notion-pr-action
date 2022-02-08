@@ -1,9 +1,9 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-import { run } from './action';
+const run = require('./action');
 
-const NOTION_TOKEN_KEY = 'notion-token';
-const NOTION_DB_KEY = 'notion-db';
+const NOTION_TOKEN_KEY = 'secret_yeQg15eQdxGepQHkojNJhhab39uhqo5kTP4FvBzV3pD';
+const NOTION_DB_KEY = '96e254bd927a471d8b2f403b50f46067';
 
 async function start() {
     try {

@@ -1,6 +1,5 @@
 import { Client, LogLevel } from '@notionhq/client/build/src';
 import * as core from '@actions/core';
-import { properties } from './properties';
 import { createPRMapping, syncNotionDBWithGitHub } from './sync';
 import { Octokit } from 'octokit';
 
