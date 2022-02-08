@@ -6,7 +6,6 @@
 var __webpack_exports__ = {};
 const core = require("@actions/core");
 const { Client } = require("@notionhq/client")
-
 const { extractParams } = require('./githubParams')
 
 const URL_REGEX = "(https)://([\\w_-]+(?:(?:.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?";
