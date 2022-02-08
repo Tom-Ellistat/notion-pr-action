@@ -1,35 +1,56 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github';
-import { run } from './action';
-
 const NOTION_TOKEN_KEY = 'secret_yeQg15eQdxGepQHkojNJhhab39uhqo5kTP4FvBzV3pD';
-const NOTION_DB_KEY = '96e254bd927a471d8b2f403b50f46067';
+// const NOTION_DB_KEY = '96e254bd927a471d8b2f403b50f46067';
 
-async function start() {
-    try {
-        const notionToken = core.getInput(NOTION_TOKEN_KEY, { required: true });
-        const notionDb = core.getInput(NOTION_DB_KEY, { required: true });
+const core = require("@actions/core");
+// const github = require("@actions/github");
+const { Client } = require("@notionhq/client")
 
-        core.info(`context event: ${github.context.eventName}`);
-        core.info(`context action: ${github.context.action}`);
-        core.info(`payload action: ${github.context.payload.action}`);
-        const options = {
-            notion: {
-                token: notionToken,
-                databaseId: notionDb,
-            },
-            github: {
-                payload: github.context.payload,
-                eventName: github.context.eventName,
-            },
-        };
+const { extractParams } = require('./githubParams')
 
-        await run(options);
-    } catch (e) {
-        core.setFailed(e instanceof Error ? e.message : e + '');
-    }
+const URL_REGEX = "(https)://([\\w_-]+(?:(?:.[\\w_-]+)+))([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?";
+
+const params = extractParams();
+
+const enhancedRegex = `${params.prefix}${URL_REGEX}${params.suffix}`;
+
+const urls = params.pullRequest.body.match(enhancedRegex) ?? [];
+const urlFound = urls.find((url) => url.match("notion.so"));
+
+if (urlFound) {
+    const notionUrlParts = urlFound
+        .match(URL_REGEX)
+        .find((url) => url.match("notion.so"))
+        .split("/");
+
+    const taskName = notionUrlParts[notionUrlParts.length - 1];
+
+    const taskParts = taskName.split("-");
+    const pageId = taskParts[taskParts.length - 1];
+
+    const notion = new Client({
+        auth: NOTION_TOKEN_KEY
+    })
+
+    notion.pages.update({
+        page_id: pageId,
+        properties: {
+            ...(
+                params.pullRequest.status ? {
+                    [params.notionProperties.status]: {
+                        name: params.pullRequest.status,
+                    },
+                } : {}
+            ),
+            [params.notionProperties.githubUrl]: params.pullRequest.href,
+        }
+    }).then(() => {
+        if (!params.pullRequest.status) {
+            core.info(
+                `The status ${params.metadata.statusKey} is not mapped with a value in the action definition. Hence, the task update body does not contain a status update`
+            );
+        }
+        core.info("Notion task updated!");
+    }).catch((err) => { core.setFailed(err); })
+} else {
+    core.warning("No notion task found in the PR body.");
 }
-
-(async () => {
-    await start();
-})();
