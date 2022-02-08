@@ -25,7 +25,7 @@ if (urlFound) {
     const pageId = taskParts[taskParts.length - 1];
 
     const notion = new Client({
-        auth: process.env.NOTION_TOKEN_KEY
+        auth: process.env.NOTION_TOKEN
     })
 
     notion.pages.update({
